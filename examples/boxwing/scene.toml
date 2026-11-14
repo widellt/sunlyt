@@ -1,0 +1,53 @@
+# Example scene: a box bus with two free-standing wings of SolAero IMM-α
+# cells. Every key is explained in docs/guide/scene-reference.md; check it
+# with `sunlyt check examples/boxwing/scene.toml --svg layout/`.
+obj = "craft.obj"
+scale = 1.0     # OBJ units → metres
+samples = 2     # 2 × 2 shadow rays per cell
+
+[[panel]]
+name = "+Y wing"
+object = "WING_PY"
+rows = 40       # along v (body Y here)
+cols = 12       # along u (body X)
+cell = [0.08, 0.04]       # 4 × 8 cm cells (the IMM-α preset is per cm², scaled to 32 cm²)
+gap = [0.002, 0.002]
+strings = { series = 8 }  # 60 strings, walking the rows back and forth
+
+[[panel]]
+name = "-Y wing"
+object = "WING_NY"
+rows = 40
+cols = 12
+cell = [0.08, 0.04]
+gap = [0.002, 0.002]
+strings = { series = 8 }
+
+# Remove this table (or pass --efficiency) for the constant-efficiency model.
+[electrical]
+cell = "solaero-imm-alpha"
+condition = "BOL"         # or "5E14", "1E15", "5E15" (1-MeV e⁻/cm²)
+temperature_c = 60.0      # used only without [thermal]
+regulation = "fixed-bus"  # or "mppt" (ideal tracker per string)
+bus_v = 28.0
+blocking_vf_v = 0.7
+# 8 cells in series: at 60 °C a string's Vmp (≈ 31.4 V) sits just above the
+# bus plus the blocking diode (28.7 V), so a hot string still delivers ~95 %
+# of its maximum. IMM-α gives ~3.9 V per cell at Vmp when hot, so the 15-cell
+# strings an AZUR 3G30A wing would use put Vmp at ~59 V and waste half the
+# power on a 28 V bus (`sunlyt check` warns about that). Trade-off: in the
+# synthetic Sun-pointing orbit the wings peak at ~107 °C, where 8 cells give
+# Vmp ≈ 27.2 V (< 28.7 V), so the hottest minutes run between Vmp and Voc
+# (31.6 V) and lose a few per cent. On a fixed bus no single length is best
+# at every temperature; the v2 MPPT model removes the trade-off.
+
+# Remove this table for a fixed cell temperature (electrical.temperature_c).
+# The wings are free-standing, so their backs radiate to space. The values
+# are typical, not from a thermal model of this craft.
+[thermal]
+heat_capacity_j_m2_k = 1800
+absorptance_front = 0.91  # typical coverglassed CIC; the IMM-α sheet gives no value
+emittance_front = 0.85
+absorptance_back = 0.90
+emittance_back = 0.85
+planets = true            # lunar and Earth albedo and IR

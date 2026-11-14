@@ -1,0 +1,30 @@
+# STK report with Earth-J2000 position, J2000->body attitude quaternion and
+# spacecraft->Sun/Earth/Moon vectors in the body frame, all lengths in km.
+length_unit_m = 1000.0
+sun_body = ["SunBdyX (km)", "SunBdyY (km)", "SunBdyZ (km)"]
+
+[time]
+column = "Time (UTCG)"
+format = "%m/%d/%Y %H:%M"
+
+[attitude]
+columns = ["J2000-qx", "J2000-qy", "J2000-qz", "J2000-qs"]
+order = "scalar_last"
+direction = "inertial_to_body"
+
+[position]
+columns = ["EarthJ2000-x (km)", "EarthJ2000-y (km)", "EarthJ2000-z (km)"]
+center = "Earth"
+
+[[bodies]]
+name = "Earth"
+# WGS-84 ellipsoid; pole defaults to J2000 +Z.
+radius_km = 6378.137
+polar_radius_km = 6356.752314245
+columns = ["EarthBdyX (km)", "EarthBdyY (km)", "EarthBdyZ (km)"]
+
+[[bodies]]
+name = "Moon"
+# Sphere (IAU mean radius); lunar flattening ~0.0012 is negligible here.
+radius_km = 1737.4
+columns = ["MoonBdyX (km)", "MoonBdyY (km)", "MoonBdyZ (km)"]

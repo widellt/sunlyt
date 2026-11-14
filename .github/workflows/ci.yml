@@ -1,0 +1,56 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+# Workflows only read the repository; nothing here needs write access.
+permissions:
+  contents: read
+
+jobs:
+  # Mission data is user-supplied and may be export-controlled. This fails the
+  # build if a data file slips in (e.g. past .gitignore with `git add -f`).
+  data-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No trajectory or mission data files
+        run: |
+          bad=$(git ls-files | grep -iE '\.(csv|tsv|xlsx?|parquet|mat|e|bsp|oem)$|(^|[^a-z])(ear99|itar)([^a-z]|$)' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::Data files must not be committed:"; echo "$bad"; exit 1
+          fi
+      - name: No export-control markings in content
+        run: |
+          # Only the files that state the rule may mention the marking.
+          hits=$(git grep -n -I -i -w -E 'ear99|itar' -- . ':!.gitignore' ':!.github/workflows/ci.yml' ':!docs/guide/ai-assist.md' ':!docs/specs/**' ':!SECURITY.md' || true)
+          if [ -n "$hits" ]; then
+            echo "::error::Export-control marking found:"; echo "$hits"; exit 1
+          fi
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      # The viewer (eframe/winit) links against X11 and Wayland on Linux.
+      # CI builds and tests it but never opens a window.
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libxkbcommon-dev libwayland-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace
+      - name: Headless CLI (no viewer)
+        run: cargo build -p sunlyt --no-default-features

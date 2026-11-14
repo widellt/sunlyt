@@ -1,0 +1,37 @@
+# The sandbox example with the Moon's limb across the Sun: a penumbra in which
+# a little over half the solar disk is hidden. Compare the eclipse inset with
+# the "Solar disk visible" readout.
+# Every key is explained in docs/guide/sandbox.md.
+samples = 4                 # 4 × 4 shadow rays per cell
+size = [0.52, 0.36]         # substrate (u, v), metres
+
+[panel]                     # the keys of a scene's [[panel]]
+rows = 8                    # along v
+cols = 6                    # along u
+cell = [0.08, 0.04]
+gap = [0.002, 0.002]
+strings = { series = 8 }    # walks the rows back and forth: 6 strings
+
+[sun]
+azimuth_deg = 200           # from +u towards +v
+elevation_deg = 50          # above the panel
+
+[[box]]                     # an instrument standing off the panel
+centre = [-0.08, -0.05, 0.14] # (u, v, height), metres
+size = [0.10, 0.06, 0.08]
+rotation_deg = 15           # about the panel normal
+
+[electrical]
+cell = "solaero-imm-alpha"
+temperature_c = 60.0
+regulation = "fixed-bus"
+bus_v = 28.0
+
+# From 100 km above the Moon its limb is asin(1737.4 / 1837.4) = 71.02°
+# from its centre. Same azimuth as the Sun, 71.0° lower: the limb passes
+# 0.02° (7 % of the Sun's radius) beyond the Sun's centre.
+[[body]]
+name = "Moon"
+direction = [-0.87728, -0.31930, -0.35837]
+distance_km = 1837.4
+radius_km = 1737.4

@@ -1,0 +1,16 @@
+/target/
+**/*.rs.bk
+# Mission data is user-supplied and may be export-controlled (EAR/ITAR). Never commit it.
+/data/private/
+*.EAR99*
+*_EAR99_*
+*ITAR*
+# Outputs
+/out/
+*.parquet
+
+# Quick-start outputs (docs/guide/getting-started.md)
+/orbit.csv
+/power.csv
+/layout/
+sunlyt-plots-*.csv

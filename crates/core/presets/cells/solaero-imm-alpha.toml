@@ -1,0 +1,77 @@
+# SolAero Technologies IMM-α space solar cell: inverted metamorphic (IMM)
+# n-on-p cell, 180 µm thick on a rigid carrier, compatible with a
+# corner-mounted silicon bypass diode.
+#
+# Source: SolAero "IMM-α Space Solar Cell", PRELIMINARY DATA, April 2018
+# (2 pages, from the satsearch.co product listing), tables "BOL
+# Performance — Typical Parameters @ AM0 (135.3 mW/cm²)", "EOL Remaining
+# Factors after exposure to 1-MeV Electron Irradiation" (annealed to
+# ECSS-E-ST-20-08C Rev.1) and "Temperature Coefficients, BOL & EOL".
+# Parameters only; no datasheet text.
+#
+# PER cm²: the sheet gives current densities (mA/cm², µA/cm²/°C), not one
+# cell size ("custom sizes available"). This file describes a 1 cm² cell.
+# Your layout's `cell = [u, v]` sets the real size, and sunlyt scales the
+# current to that area (voltages unchanged).
+#
+# Caveats, from the sheet:
+# - Preliminary data.
+# - Temperature coefficients are "projected … based upon data for similar
+#   materials and device structures", not measured.
+# - The test temperature is not printed. 28 °C is assumed (the usual
+#   AM0 test temperature). Confirm against your ICD.
+# - The bypass diode's forward drop is not given, so the electrical model's
+#   0.8 V default applies (set `[electrical] bypass_vf_v` to override).
+# - EOL I-V points are BOL × the sheet's remaining factors. Their products
+#   reproduce the sheet's Pmp factors (0.911, 0.872, 0.714 against
+#   0.91, 0.87, 0.71).
+
+name = "SolAero IMM-α (per cm²)"
+source = "SolAero IMM-α Space Solar Cell, preliminary data sheet, April 2018"
+area_cm2 = 1.0
+reference_irradiance_w_m2 = 1353.0   # AM0 135.3 mW/cm², as printed
+reference_temperature_c = 28.0       # assumed; not printed on the sheet
+
+[[condition]]
+name = "BOL"                # 32.0 % typical efficiency
+voc_v = 4.78
+isc_a = 0.01066             # Jsc 10.66 mA/cm²
+vmp_v = 4.28
+imp_a = 0.01012             # Jmp 10.12 mA/cm²
+dvoc_dt_v_per_k = -0.0105   # -10.5 mV/°C
+disc_dt_a_per_k = 0.0000098 # 9.8 µA/cm²/°C
+dvmp_dt_v_per_k = -0.0112   # -11.2 mV/°C
+dimp_dt_a_per_k = 0.0000067 # 6.7 µA/cm²/°C
+
+[[condition]]
+name = "5E14"               # remaining factors Voc 0.92, Jsc 0.99, Vmp 0.93, Jmp 0.98
+voc_v = 4.3976
+isc_a = 0.0105534
+vmp_v = 3.9804
+imp_a = 0.0099176
+dvoc_dt_v_per_k = -0.0117
+disc_dt_a_per_k = 0.0000099
+dvmp_dt_v_per_k = -0.0125
+dimp_dt_a_per_k = 0.0000052
+
+[[condition]]
+name = "1E15"               # remaining factors Voc 0.90, Jsc 0.97, Vmp 0.89, Jmp 0.98
+voc_v = 4.302
+isc_a = 0.0103402
+vmp_v = 3.8092
+imp_a = 0.0099176
+dvoc_dt_v_per_k = -0.0119
+disc_dt_a_per_k = 0.0000097
+dvmp_dt_v_per_k = -0.0120
+dimp_dt_a_per_k = 0.0000033
+
+[[condition]]
+name = "5E15"               # remaining factors Voc 0.84, Jsc 0.87, Vmp 0.84, Jmp 0.85
+voc_v = 4.0152
+isc_a = 0.0092742
+vmp_v = 3.5952
+imp_a = 0.008602
+dvoc_dt_v_per_k = -0.0125
+disc_dt_a_per_k = 0.0000090
+dvmp_dt_v_per_k = -0.0128
+dimp_dt_a_per_k = 0.0000076  # as printed (higher than at 1E15)

@@ -1,0 +1,62 @@
+# AZUR SPACE 3G30A-Advanced (4x8) solar cell assembly (CIC): 3G30C bare
+# triple-junction cell (InGaP/GaAs/Ge) + 100 µm AR coverglass + corner Si
+# bypass diode.
+#
+# Source: AZUR SPACE datasheet "TJ 3G30-Advanced (4x8)", DB 00010891-01,
+# issue date 11-Apr-2025, page 2 ("Typical Electrical Performance", CIC
+# columns, and "Typical Temperature Coefficients"). Test conditions printed
+# there: AM0 WRC spectrum, 1367 W/m², T = 28 °C, standard CASOLBA 2005.
+# Fluences are 1 MeV electrons per cm². Only conditions with published
+# temperature coefficients are listed (the sheet also gives 5E13 and 1E16
+# I-V points without coefficients). Parameters only; no datasheet text.
+
+name = "AZUR SPACE 3G30A-Advanced 4x8 CIC"
+source = "AZUR SPACE DB 00010891-01 (11-Apr-2025), p. 2"
+area_cm2 = 30.18                   # cell area (glassed area 31.13 cm²)
+reference_irradiance_w_m2 = 1367.0 # AM0 WRC
+reference_temperature_c = 28.0
+bypass_vf_v = 0.8                  # "Vforward (620 mA) ≤ 0.8 V (T = 25 °C ± 3 °C)"
+
+[[condition]]
+name = "BOL"
+voc_v = 2.700
+isc_a = 0.515
+vmp_v = 2.411
+imp_a = 0.499
+dvoc_dt_v_per_k = -0.0062
+disc_dt_a_per_k = 0.00036
+dvmp_dt_v_per_k = -0.0067
+dimp_dt_a_per_k = 0.00024
+
+[[condition]]
+name = "2.5E14"
+voc_v = 2.584
+isc_a = 0.512
+vmp_v = 2.298
+imp_a = 0.495
+dvoc_dt_v_per_k = -0.0065
+disc_dt_a_per_k = 0.00033
+dvmp_dt_v_per_k = -0.0068
+dimp_dt_a_per_k = 0.00020
+
+[[condition]]
+name = "5E14"
+voc_v = 2.552
+isc_a = 0.511
+vmp_v = 2.262
+imp_a = 0.494
+dvoc_dt_v_per_k = -0.0066
+disc_dt_a_per_k = 0.00035
+dvmp_dt_v_per_k = -0.0071
+dimp_dt_a_per_k = 0.00024
+
+[[condition]]
+name = "1E15"
+voc_v = 2.519
+isc_a = 0.496
+vmp_v = 2.230
+imp_a = 0.480
+dvoc_dt_v_per_k = -0.0067
+disc_dt_a_per_k = 0.00038
+dvmp_dt_v_per_k = -0.0072
+dimp_dt_a_per_k = 0.00028
